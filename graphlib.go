@@ -55,12 +55,12 @@ func (g *Graph) DistBetn(source string, destination string) ([]string, uint) {
 			break
 		}
 		// fmt.Println(u)
-		uDist := dist[u]
+		currDist := dist[u]
 		for _, link := range g.nodes[u].links {
 			if _, ok := visited[link.to.Name]; ok {
 				continue
 			}
-			alt := uDist + link.cost
+			alt := currDist + link.cost
 			v := link.to.Name
 			if alt < dist[v] {
 				dist[v] = alt
@@ -91,12 +91,12 @@ func (g *Graph) Dijkstra(source string) (map[string]uint, map[string]string) {
 	dist[source] = 0
 	for u := source; u != ""; u = getClosestNonVisitedNode(dist, visited) {
 		// fmt.Println(u)
-		uDist := dist[u]
+		currDist := dist[u]
 		for _, link := range g.nodes[u].links {
 			if _, ok := visited[link.to.Name]; ok {
 				continue
 			}
-			alt := uDist + link.cost
+			alt := currDist + link.cost
 			v := link.to.Name
 			if alt < dist[v] {
 				dist[v] = alt
