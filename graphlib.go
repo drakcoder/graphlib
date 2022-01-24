@@ -1,5 +1,7 @@
 package graphlib
 
+import "fmt"
+
 type Node struct {
 	Name  string
 	links []Edge
@@ -12,7 +14,8 @@ type Edge struct {
 }
 
 type Graph struct {
-	nodes map[string]*Node
+	nodes  map[string]*Node
+	exists map[string]bool
 }
 
 func NewGraph() *Graph {
@@ -23,6 +26,7 @@ func (g *Graph) AddNodes(names ...string) {
 	for _, name := range names {
 		if _, ok := g.nodes[name]; !ok {
 			g.nodes[name] = &Node{Name: name, links: []Edge{}}
+			g.exists[name] = true
 		}
 	}
 }
@@ -35,7 +39,11 @@ func (g *Graph) AddLink(a, b string, cost int) {
 
 func (g *Graph) DistBetn(source string, destination string) ([]string, uint) {
 	dist, prev := map[string]uint{}, map[string]string{}
-
+	var path []string
+	if !g.exists[source] || !g.exists[destination] {
+		fmt.Println("one of the nodes does not exist!")
+		return path, 0
+	}
 	for _, node := range g.nodes {
 		dist[node.Name] = INFINITY
 		prev[node.Name] = ""
@@ -61,7 +69,6 @@ func (g *Graph) DistBetn(source string, destination string) ([]string, uint) {
 		}
 		visited[u] = true
 	}
-	var path []string
 	cur := destination
 	for cur != "" {
 		path = append(path, cur)
