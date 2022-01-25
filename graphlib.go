@@ -1,6 +1,6 @@
 package graphlib
 
-import "fmt"
+// import "fmt"
 
 type Node struct {
 	Name  string
@@ -19,7 +19,7 @@ type Graph struct {
 }
 
 func NewGraph() *Graph {
-	return &Graph{nodes: map[string]*Node{}}
+	return &Graph{nodes: map[string]*Node{}, exists: map[string]bool{}}
 }
 
 func (g *Graph) AddNodes(names ...string) {
@@ -41,8 +41,7 @@ func (g *Graph) DistBetn(source string, destination string) ([]string, uint) {
 	dist, prev := map[string]uint{}, map[string]string{}
 	var path []string
 	if !g.exists[source] || !g.exists[destination] {
-		fmt.Println("one of the nodes does not exist!")
-		return path, 0
+		panic("one of the nodes does not exist!")
 	}
 	for _, node := range g.nodes {
 		dist[node.Name] = INFINITY
