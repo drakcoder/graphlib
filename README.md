@@ -22,7 +22,7 @@ import (
 )
 
 func main() {
-	g := graphlib.NewGraph()
+	g := graphlib.NewGraph("directed")
 	g.AddNodes("a", "b", "c", "d", "e")
 	g.AddLink("a", "b", 6)
 	g.AddLink("d", "a", 1)
@@ -47,9 +47,10 @@ import (
 )
 
 func main() {
-	g := graphlib.NewGraph()
+	g := graphlib.NewGraph("directed")
 } 
 ```
+Take Note that the the argument in the function can be either "directed" or "undirected" and must be present.
 
 **AddNodes()**
 is used to add new Nodes to the graph before creating any links for them.
