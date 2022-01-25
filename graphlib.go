@@ -14,12 +14,13 @@ type Edge struct {
 }
 
 type Graph struct {
-	nodes  map[string]*Node
-	exists map[string]bool
+	nodes     map[string]*Node
+	exists    map[string]bool
+	GraphType string
 }
 
-func NewGraph() *Graph {
-	return &Graph{nodes: map[string]*Node{}, exists: map[string]bool{}}
+func NewGraph(GT string) *Graph {
+	return &Graph{nodes: map[string]*Node{}, exists: map[string]bool{}, GraphType: GT}
 }
 
 func (g *Graph) AddNodes(names ...string) {
@@ -35,6 +36,9 @@ func (g *Graph) AddLink(a, b string, cost int) {
 	aNode := g.nodes[a]
 	bNode := g.nodes[b]
 	aNode.links = append(aNode.links, Edge{from: aNode, to: bNode, cost: uint(cost)})
+	if g.GraphType == "undirected" {
+		bNode.links = append(bNode.links, Edge{from: bNode, to: aNode, cost: uint(cost)})
+	}
 }
 
 func (g *Graph) DistBetn(source string, destination string) ([]string, uint) {
