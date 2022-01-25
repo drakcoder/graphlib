@@ -20,6 +20,9 @@ type Graph struct {
 }
 
 func NewGraph(GT string) *Graph {
+	if GT != "undirected" && GT != "directed" {
+		panic("The argument for graph creation can be \"directed\" or \"undirected\" only")
+	}
 	return &Graph{nodes: map[string]*Node{}, exists: map[string]bool{}, GraphType: GT}
 }
 
