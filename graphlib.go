@@ -26,7 +26,7 @@ func NewGraph(GT string) *Graph {
 	return &Graph{nodes: map[string]*Node{}, exists: map[string]bool{}, GraphType: GT}
 }
 
-func (g *Graph) AddNodes(names ...string) {
+func (g *Graph) AddNodes(names []string) {
 	for _, name := range names {
 		if _, ok := g.nodes[name]; !ok {
 			g.nodes[name] = &Node{Name: name, links: []Edge{}}
