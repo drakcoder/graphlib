@@ -38,6 +38,9 @@ func (g *Graph) AddNodes(names []string) {
 func (g *Graph) AddLink(a, b string, cost int) {
 	aNode := g.nodes[a]
 	bNode := g.nodes[b]
+	if aNode == nil || bNode == nil {
+		panic("creating edge for node that does not exist!")
+	}
 	aNode.links = append(aNode.links, Edge{from: aNode, to: bNode, cost: uint(cost)})
 	if g.GraphType == "undirected" {
 		bNode.links = append(bNode.links, Edge{from: bNode, to: aNode, cost: uint(cost)})
