@@ -1,7 +1,5 @@
 package graphlib
 
-// import "fmt"
-
 type Node struct {
 	Name  string
 	links []Edge
@@ -63,7 +61,6 @@ func (g *Graph) DistBetn(source string, destination string) ([]string, uint) {
 		if source == destination {
 			break
 		}
-		// fmt.Println(u)
 		currDist := dist[u]
 		for _, link := range g.nodes[u].links {
 			if _, ok := visited[link.to.Name]; ok {
@@ -136,6 +133,42 @@ func getClosestNonVisitedNode(dist map[string]uint, visited map[string]bool) str
 			lowestNode = key
 		}
 	}
-	// fmt.Println(lowestNode)
 	return lowestNode
+}
+
+func (g *Graph) TopologicalSort() []string {
+	in_degree := make(map[string]int)
+	for name := range g.nodes {
+		for _, link := range g.nodes[name].links {
+			if _, ok := in_degree[name]; !ok {
+				in_degree[link.to.Name] = 1
+			} else {
+				in_degree[link.to.Name]++
+			}
+		}
+	}
+	var q []string
+	for name := range g.nodes {
+		if in_degree[name] == 0 {
+			q = append(q, name)
+		}
+	}
+	cnt := 0
+	var result []string
+	for len(q) > 0 {
+		cur := q[0]
+		q = q[1:]
+		result = append(result, cur)
+		for _, link := range g.nodes[cur].links {
+			in_degree[link.to.Name]--
+			if in_degree[link.to.Name] == 0 {
+				q = append(q, link.to.Name)
+			}
+		}
+		cnt++
+	}
+	if cnt != len(g.nodes) {
+		panic("there exists a cycle in the graph")
+	}
+	return result
 }
