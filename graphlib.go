@@ -48,6 +48,27 @@ func (g *Graph) AddLink(a, b string, cost int) {
 func (g *Graph) DistBetn(source string, destination string) ([]string, uint) {
 	dist, prev := map[string]uint{}, map[string]string{}
 	var path []string
+	reverse := func(input []string) []string {
+		var res []string
+		for i := len(input) - 1; i >= 0; i-- {
+			res = append(res, input[i])
+		}
+		return res
+	}
+	getClosestNonVisitedNode := func(dist map[string]uint, visited map[string]bool) string {
+		lowestCost := INFINITY
+		lowestNode := ""
+		for key, dis := range dist {
+			if _, ok := visited[key]; dis == INFINITY || ok {
+				continue
+			}
+			if dis < lowestCost {
+				lowestCost = dis
+				lowestNode = key
+			}
+		}
+		return lowestNode
+	}
 	if !g.exists[source] || !g.exists[destination] {
 		panic("one of the nodes does not exist!")
 	}
@@ -87,6 +108,20 @@ func (g *Graph) DistBetn(source string, destination string) ([]string, uint) {
 const INFINITY = ^uint(0)
 
 func (g *Graph) Dijkstra(source string) (map[string]uint, map[string]string) {
+	getClosestNonVisitedNode := func(dist map[string]uint, visited map[string]bool) string {
+		lowestCost := INFINITY
+		lowestNode := ""
+		for key, dis := range dist {
+			if _, ok := visited[key]; dis == INFINITY || ok {
+				continue
+			}
+			if dis < lowestCost {
+				lowestCost = dis
+				lowestNode = key
+			}
+		}
+		return lowestNode
+	}
 	dist, prev := map[string]uint{}, map[string]string{}
 
 	for _, node := range g.nodes {
@@ -112,28 +147,6 @@ func (g *Graph) Dijkstra(source string) (map[string]uint, map[string]string) {
 		visited[u] = true
 	}
 	return dist, prev
-}
-
-func reverse(input []string) []string {
-	if len(input) == 0 {
-		return input
-	}
-	return append(reverse(input[1:]), input[0])
-}
-
-func getClosestNonVisitedNode(dist map[string]uint, visited map[string]bool) string {
-	lowestCost := INFINITY
-	lowestNode := ""
-	for key, dis := range dist {
-		if _, ok := visited[key]; dis == INFINITY || ok {
-			continue
-		}
-		if dis < lowestCost {
-			lowestCost = dis
-			lowestNode = key
-		}
-	}
-	return lowestNode
 }
 
 func (g *Graph) TopologicalSort() []string {

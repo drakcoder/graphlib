@@ -66,6 +66,19 @@ func (g *MapGraph) CreatePath(from, to, ptype string, dist uint) {
 }
 
 func (g *MapGraph) AStar(source string) (map[string]uint, map[string]string) {
+	GetNext := func(hdist, visited map[string]uint) string {
+		min := INFINITY
+		u := ""
+		for key, value := range hdist {
+			if _, ok := visited[key]; ok || value == INFINITY {
+				continue
+			} else if min > value {
+				min = value
+				u = key
+			}
+		}
+		return u
+	}
 	dist, hdist, prev := map[string]uint{}, map[string]uint{}, map[string]string{}
 	if _, ok := g.nodes[source]; !ok {
 		panic("the given source node does not exist")
@@ -74,6 +87,9 @@ func (g *MapGraph) AStar(source string) (map[string]uint, map[string]string) {
 		dist[node.name] = INFINITY
 		hdist[node.name] = INFINITY
 		prev[node.name] = ""
+	}
+	CalculateDist := func(p1, p2 Point) float64 {
+		return math.Sqrt(float64(float64((p1.X-p2.X))*float64((p1.X-p2.X)) + float64((p1.Y-p2.Y))*float64((p1.Y-p2.Y))))
 	}
 
 	dist[source] = 0
@@ -98,22 +114,4 @@ func (g *MapGraph) AStar(source string) (map[string]uint, map[string]string) {
 
 	return dist, prev
 
-}
-
-func GetNext(hdist, visited map[string]uint) string {
-	min := INFINITY
-	u := ""
-	for key, value := range hdist {
-		if _, ok := visited[key]; ok || value == INFINITY {
-			continue
-		} else if min > value {
-			min = value
-			u = key
-		}
-	}
-	return u
-}
-
-func CalculateDist(p1, p2 Point) float64 {
-	return math.Sqrt(float64(float64((p1.X-p2.X))*float64((p1.X-p2.X)) + float64((p1.Y-p2.Y))*float64((p1.Y-p2.Y))))
 }
