@@ -56,7 +56,7 @@ Take Note that the the argument in the function can be either "directed" or "und
 is used to add new Nodes to the graph before creating any links for them.
 
 **AddLink()**
-is used add links to the existing Nodes along with the cost to traverse.
+is used to add links to the existing Nodes along with the cost to traverse.
 
 **DistBetn()** 
 is used to find the shortest distance to traverse from a source node to a destination node.
